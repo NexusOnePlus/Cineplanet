@@ -1,0 +1,37 @@
+sequenceDiagram
+  participant Cliente
+  participant UI
+  participant Sistema
+  participant DB
+  participant Pago
+  participant Emision as Servicio de Boletas
+
+  Cliente->>UI: Selecciona sede, película, función
+  UI->>Sistema: solicitud funciones(sede,pelicula)
+  Sistema->>DB: consultar funciones(sede,pelicula)
+  DB-->>Sistema: lista funciones
+  Sistema-->>UI: mostrar funciones
+
+  Cliente->>UI: Selecciona asientos
+  UI->>Sistema: reservar temporal (asientos,funcion)
+  Sistema->>DB: reservar(asientos,funcion,expiracion)
+  DB-->>Sistema: Ok
+  Sistema-->>UI: bloquea asientos (UI)
+
+  Cliente->>UI: Paga (tarjeta)
+  UI->>Pago: procesa Pago(datos)
+  alt pago aprobado
+    Pago-->>UI: aprobado
+    UI->>Sistema: confirmar Pago(transaccion)
+    Sistema->>Emision: generar Boleta(tipo:entrada, datosCompra)
+    Emision-->>Sistema: boletaId, pdf
+    Sistema->>DB: guardar Venta(boleta,asientos,transaccion)
+    DB-->>Sistema: ok
+    Sistema-->>UI: mostrar Boleta
+    UI-->>Cliente: boleta / QR
+  else pago rechazado
+    Pago-->>UI: rechazado
+    UI-->>Cliente: mostrar ErrorPago
+    UI->>Sistema: liberar (asientos)
+    Sistema->>DB: liberar Asientos
+  end

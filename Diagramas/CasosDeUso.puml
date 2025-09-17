@@ -1,0 +1,51 @@
+@startuml as Cineplanet
+left to right direction
+skinparam packageStyle rectangle
+
+skinparam shadowing false
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+}
+
+actor "Cliente" as Cliente
+actor "Empleado" as Empleado
+actor "Administrador" as Admin
+
+rectangle "Cineplanet" {
+  (Comprar Boletos) as Boletos
+  (Comprar Dulcería) as Dulceria
+  (Comprar Boletos + Dulcería) as Combo
+  (Seleccionar Función) as Funcion
+  (Seleccionar Asientos) as Asientos
+  (Emitir Boleta) as EmitirBoleta
+  
+  (Atender Cliente) as Atender
+  (Vender Productos) as Vender
+  
+  (Registrar Personal) as RegistrarPersonal
+  (Gestionar Sedes) as GestionarSedes
+}
+
+Cliente --> Funcion
+Cliente --> Asientos
+Cliente --> Boletos
+Cliente --> Dulceria
+Cliente --> Combo
+Cliente --> EmitirBoleta
+
+Empleado --> Atender
+Empleado --> Vender
+Atender --> Boletos
+Atender --> Dulceria
+Atender --> Combo
+Vender --> EmitirBoleta
+
+Admin --> RegistrarPersonal
+Admin --> GestionarSedes
+
+Boletos .> Funcion : <<include>>
+Boletos .> Asientos : <<include>>
+Combo .> Boletos : <<include>>
+Combo .> Dulceria : <<include>>
+@enduml
