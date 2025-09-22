@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor Admin
+    participant Sistema as Sistema Cineplanet
+    participant DB as Base de Datos
+    participant Pago as Sistema de Pago
+    actor Cliente
+
+    Admin->>Sistema: Cancelar función
+    Sistema->>DB: Actualizar estado cartelera
+    DB-->>Sistema: Confirmación
+    Sistema-->>Cliente: Notificación de cancelación
+
+    loop Reembolsar clientes
+        Sistema->>Pago: Procesar reembolso
+        Pago-->>Sistema: Confirmación reembolso
+    end
+
+    Sistema-->>Admin: Función cancelada y clientes notificados

@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor Cliente
+    participant Sistema as Sistema Cineplanet
+    participant Pago as Sistema de Pago
+    participant DB as Base de Datos
+
+    Cliente->>Sistema: Seleccionar película y función
+    Sistema->>DB: Consultar disponibilidad
+    DB-->>Sistema: Función y asientos disponibles
+    Cliente->>Sistema: Seleccionar asientos
+
+    Sistema->>Pago: Procesar pago
+    alt Pago aprobado
+        Pago-->>Sistema: Confirmación
+        Sistema->>DB: Registrar compra
+        DB-->>Sistema: OK
+        Sistema-->>Cliente: Emitir boleto
+    else Pago rechazado
+        Pago-->>Sistema: Error
+        Sistema-->>Cliente: Notificación de rechazo
+    end

@@ -1,0 +1,10 @@
+sequenceDiagram
+    actor Admin
+    participant Sistema as Sistema Cineplanet
+    participant DB as Base de Datos
+
+    Admin->>Sistema: Programar nueva función
+    Sistema->>DB: Registrar función en cartelera
+    DB-->>Sistema: Confirmación
+    Sistema-->>Admin: Función registrada
+    Sistema-->>Cliente: Función disponible en cartelera

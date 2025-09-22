@@ -1,0 +1,19 @@
+sequenceDiagram
+    actor Cliente
+    participant Sistema as Sistema Cineplanet
+    participant DB as Base de Datos
+
+    Cliente->>Sistema: Solicita Registro
+    Sistema->>DB: Guardar datos cliente
+    DB-->>Sistema: Confirmación
+    Sistema-->>Cliente: Registro exitoso
+
+    Cliente->>Sistema: Login (usuario/contraseña)
+    Sistema->>DB: Validar credenciales
+    alt Credenciales válidas
+        DB-->>Sistema: Datos válidos
+        Sistema-->>Cliente: Acceso concedido
+    else Credenciales inválidas
+        DB-->>Sistema: Error
+        Sistema-->>Cliente: Acceso denegado
+    end

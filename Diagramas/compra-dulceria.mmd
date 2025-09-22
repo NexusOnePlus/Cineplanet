@@ -1,0 +1,27 @@
+sequenceDiagram
+    actor Cliente
+    participant Empleado
+    participant Sistema as Sistema Cineplanet
+    participant Pago as Sistema de Pago
+    participant DB as Base de Datos
+
+    Cliente->>Empleado: Solicitar productos (dulcería)
+
+    opt Aplicar combo
+        Empleado->>Sistema: Aplicar descuento combo
+        Sistema-->>Empleado: Precio actualizado
+    end
+
+    Empleado->>Sistema: Registrar venta
+    Sistema->>Pago: Procesar pago
+    alt Pago aprobado
+        Pago-->>Sistema: Confirmación
+        Sistema->>DB: Registrar venta dulcería
+        DB-->>Sistema: OK
+        Sistema-->>Empleado: Emitir boleta dulcería
+        Empleado-->>Cliente: Entregar productos y boleta
+    else Pago rechazado
+        Pago-->>Sistema: Error
+        Sistema-->>Empleado: Venta rechazada
+        Empleado-->>Cliente: Notificar rechazo
+    end
